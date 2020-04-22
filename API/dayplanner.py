@@ -1,64 +1,27 @@
 import  sys
-from lxml import etree
+import  json
+import  pprint
 from datetime import  datetime
+from  API.Objects.Task import  Task
 
-class Task:
-    name = None
-    date = None
-    description = None
-    done = False
+DATA_FILE_NAME = "data.json"
 
-    def __init__(self, name):
-        self.name = name
 
-    def parseXML(self):
-        pass
-    def getXML(self):
-        root = etree.Element('Task')
 
-        name = etree.SubElement(root,'Name')
-        name.text = self.name
-
-        date = etree.SubElement(root,'Date')
-        date.text = str(self.date)
-
-        description = etree.SubElement(root,'Description')
-        description.text = self.description
-
-        if self.done:
-            etree.SubElement(root,'Done')
-
-        print(etree.tostring(root))
-        return root
-
-    def __str__(self):
-        return self.name
-
-class Phone:
-    name = None
-    num = None
-    description = None
-
-    def __init__(self,name):
-        self.name = name
-
-    def parseXML(self):
-        pass
-
-    def __str__(self):
-        return  self.name
 
 class DayPlanner:
-    tasks = []
-    phones =[]
+    data = {
+        "Tasks": [],
+        "Phones": []
+    }
 
     def __init__(self):
-        self.tasks.append(Task(name='newTask'))
-        self.tasks.append(Task(name='LearnPy'))
-        self.phones.append(Phone(name='Boris'))
-        self.phones.append(Phone(name='Life'))
+        # self.test_create_tasks()
+        self.initObjectData()
+        self.create_new_task("read book",False, datetime(2020, 5,20))
+        # self.updateJSON()
 
-        self.shell_main_menu()
+        # self.shell_main_menu()
     def shell_main_menu(self):
         if(len(sys.argv) <2): return
 
@@ -80,26 +43,38 @@ class DayPlanner:
     def out_phones(self):
         print(*self.phones, sep='\n')
 
-    def create_new_task(self):
-        tree = etree.parse('data.xml')
-        root = tree.getroot()
-        # tasks = ET.SubElement(root,'tasks')
-        tasks = root.find('tasks')
-        newTask = Task('do job')
-        newTask.date = datetime.now()
-        tasks.append(newTask.getXML())
-        print(etree.tostring(root, pretty_print=True))
+    def readJSON(self):
+        with open(DATA_FILE_NAME, "r") as read_file:
+            return json.load(read_file)
 
-        tree.write('data.xml', pretty_print=True)
+    def updateJSON(self):
+        jsondata = {
+            "Tasks" : [task.encodeJSON() for task in self.data["Tasks"]],
+            "Phones" : []
+        }
+        with open(DATA_FILE_NAME, "w") as write_file:
+            json.dump(jsondata, write_file, indent=4)
+
+    def initObjectData(self):
+        nonobjectdata = self.readJSON()
+        for task in nonobjectdata["Tasks"]:
+            self.data["Tasks"].append(Task.decodeJSON(task))
+        pprint.pprint(self.data)
+        [print(task) for task in self.data["Tasks"]]
+
+    def create_new_task(self, name, done, date):
+        self.data["Tasks"].append(Task(name,done, date))
+        self.updateJSON()
 
     def craete_new_phone(self):
         pass
-    def read_from_XML(self):
-        pass
-    def save_to_XML(self):
-        pass
+
+    def test_create_tasks(self):
+        t1 = Task("Buy clothes",True, datetime.now())
+        t2 = Task("Update pip packages", False, datetime.now())
+        self.data["Tasks"].append(t1)
+        self.data["Tasks"].append(t2)
+
 
 dayPlanner = DayPlanner()
-
 # print(sys.argv[1])
-dayPlanner.create_new_task()
