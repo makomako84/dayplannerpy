@@ -1,5 +1,4 @@
 from API.Utils.timeutils import  deserializeDate, serializeDate
-from  datetime import  datetime
 
 
 class Task:
@@ -15,7 +14,8 @@ class Task:
     @staticmethod
     def decodeJSON(jsondata):
         newTask = Task(name=jsondata["name"], done=jsondata["done"], date=deserializeDate(jsondata["date"]))
-        newTask.description = jsondata["description"]
+        if "description" in jsondata:
+            newTask.description = jsondata["description"]
         return newTask
 
     def encodeJSON(self):
