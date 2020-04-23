@@ -62,29 +62,35 @@ class DayPlanner:
     def shell_find_task(self):
         ui={}
         ui["name"] = input("Enter part of task name: ")
-
-        searchfunc = lambda x: x.name.find(ui["name"])!=-1
-        res = list(filter(searchfunc, self.__data["Tasks"]))
+        res = self.find_task_by_name(ui["name"])
         [print(x) for x in res]
         return  res
 
     def shell_del_task(self):
         res = self.shell_find_task()
         if len(res) > 1:
-            print("Create more Accureate request")
+            print("Create more Accurate request")
         else:
-            delaquired = True if input("Delete? (y)") == "y" else False
-            if(delaquired):
-                self.__data["Tasks"]  = list(filter((lambda task: res[0]!=task),self.__data["Tasks"]))
-                self.updateJSON()
+            if(input("Delete? (y)") == "y"):
+                self.delete_task(res[0])
 
 
     # tasks functions
     def out_tasks(self):
         [print(task.__str__()+"\n") for task in self.__data["Tasks"]]
+
     def add_new_task(self,dict):
         self.__data["Tasks"].append(Task.decodeJSON(dict))
         self.updateJSON()
+
+    def find_task_by_name(self, searchvalue:str) -> []:
+        searchfunc = lambda x: x.name.find(searchvalue) != -1
+        return list(filter(searchfunc, self.__data["Tasks"]))
+
+    def delete_task(self, foundtask: Task):
+        self.__data["Tasks"].remove(foundtask)
+        self.updateJSON()
+
 
     def out_phones(self):
         print(*self.phones, sep='\n')

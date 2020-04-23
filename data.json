@@ -1,18 +1,6 @@
 {
     "Tasks": [
         {
-            "name": "read book",
-            "description": null,
-            "done": false,
-            "date": "2020-5-20 0:0"
-        },
-        {
-            "name": "newtask",
-            "description": null,
-            "done": true,
-            "date": "2020-12-3 5:4"
-        },
-        {
             "name": "some another task",
             "description": null,
             "done": true,

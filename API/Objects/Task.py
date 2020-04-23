@@ -23,6 +23,10 @@ class Task:
             "date": serializeDate(self.date)
         }
 
+    def __eq__(self, other):
+        assert isinstance(other, Task), "other is not instance of Task"
+        return  self.name == other.name
+
     def __ne__(self, other):
         assert isinstance(other, Task), "other is not instance of Task"
         return self.name != other.name
