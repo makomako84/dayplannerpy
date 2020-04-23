@@ -1,18 +1,6 @@
 {
     "Tasks": [
         {
-            "name": "Buy clothes",
-            "description": null,
-            "done": true,
-            "date": "2020-4-22 12:37"
-        },
-        {
-            "name": "Update pip packages",
-            "description": null,
-            "done": false,
-            "date": "2020-4-22 12:37"
-        },
-        {
             "name": "read book",
             "description": null,
             "done": false,
