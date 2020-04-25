@@ -32,7 +32,7 @@ class DayPlanner:
 
     # tasks functions
     def out_tasks(self):
-        [print(task.__str__()+"\n") for task in self.__data["Tasks"]]
+        return [task.__str__() for task in self.__data["Tasks"]]
 
     def add_new_task(self,dict):
         self.__data["Tasks"].append(Task.decodeJSON(dict))

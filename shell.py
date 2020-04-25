@@ -27,7 +27,8 @@ class Shell():
 
     def shell_out_tasks(self):
         dayPlanner = DayPlanner()
-        dayPlanner.out_tasks()
+        for taskstr in dayPlanner.out_tasks():
+            print(taskstr)
 
     def shell_add_task(self):
         ui = {}
