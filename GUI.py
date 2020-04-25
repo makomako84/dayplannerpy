@@ -2,16 +2,21 @@ from tkinter import *
 from tkcalendar import  Calendar, DateEntry
 from API.DayPlanner import DayPlanner
 import  datetime
+from pydispatch import dispatcher
+
+DATE_PICKED = 'date-picked'
 
 class DatePicker(Frame):
     def __init__(self,master):
         Frame.__init__(self,master)
         self.button = Button(master, text="Pick date")
-        self.button['command'] = self.date_picker
+        self.button['command'] = self.date_picker_window
+        self.picked_date = None
 
-    def date_picker(self):
-        def print_sel():
-            print(cal.selection_get())
+    def date_picker_window(self):
+        def apply_selection():
+            self.picked_date = cal.selection_get()
+            dispatcher.send(signal=DATE_PICKED, sender=self)
             cal.master.destroy()
 
         top = Toplevel(self.master)
@@ -22,14 +27,15 @@ class DatePicker(Frame):
                        mindate=mindate, maxdate=maxdate, disabledforeground='red',
                        cursor="hand1", year=today.year, month=today.month, day=today.day)
         cal.pack(fill="both", expand=True)
-        b = Button(top, text="ok", command=print_sel)
+        b = Button(top, text="ok", command=apply_selection)
         b.pack()
     def pack(self):
         self.button.pack()
-    def apply_selected(self):
-        pass
 
 class GUI():
+
+    def date_picked_handler(self,sender):
+        print("date picked: ", sender.picked_date)
 
     def __init__(self, master):
         self.__master = master
@@ -42,6 +48,8 @@ class GUI():
         self.label_output.pack()
         self.button_output.pack()
         self.date_picker.pack()
+
+        dispatcher.connect(self.date_picked_handler, signal=DATE_PICKED, sender=dispatcher.Any)
 
     def out_calend(self):
         dp = DayPlanner()
