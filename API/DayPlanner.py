@@ -21,13 +21,16 @@ class DayPlanner:
     def __init__(self):
         # self.test_create_tasks()
         self.__initObjectData()
+        print("init object data")
         # self.updateJSON()
         # self.shell_main_menu()
 
     def __initObjectData(self):
         nonobjectdata = self.readJSON()
+        tasks = []
         for task in nonobjectdata["Tasks"]:
-            self.__data["Tasks"].append(Task.decodeJSON(task))
+            tasks.append(Task.decodeJSON(task))
+        self.__data["Tasks"] = tasks
 
 
     # tasks functions

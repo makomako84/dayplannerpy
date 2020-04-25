@@ -32,28 +32,50 @@ class DatePicker(Frame):
     def pack(self):
         self.button.pack()
 
-class GUI():
+class GUI(Frame):
 
     def date_picked_handler(self,sender):
-        print("date picked: ", sender.picked_date)
+        self.currentDate.set(sender.picked_date)
 
     def __init__(self, master):
-        self.__master = master
-        self.label_output = Label(master,width=100)
-        self.button_output = Button(master, text="Out")
-        self.date_picker = DatePicker(master)
+        Frame.__init__(self,master)
+
+        # vars
+        self.currentDate = StringVar()
+        self.currentDate.set(datetime.date.today())
+
+        # Frames
+        self.frame_today_list = Frame(master)
+        self.frame_buttons_holder = Frame(master)
+
+        self.label_current_date = Label(self.frame_today_list, width=25, textvariable=self.currentDate)
+        self.label_output = Label(self.frame_today_list,width=100)
+        self.listbox_tasks = Listbox(self.frame_today_list,width=100,height=25)
+        self.button_output = Button(self.frame_buttons_holder, text="Out")
+        self.date_picker = DatePicker(self.frame_buttons_holder)
+
 
         self.button_output['command'] = self.out_calend
 
-        self.label_output.pack()
+
+        self.frame_today_list.pack()
+        self.frame_buttons_holder.pack()
+
+        self.label_current_date.pack(side=TOP)
+        self.listbox_tasks.pack(side=TOP)
         self.button_output.pack()
         self.date_picker.pack()
 
         dispatcher.connect(self.date_picked_handler, signal=DATE_PICKED, sender=dispatcher.Any)
 
+    def update_listbox(self):
+        pass
+
     def out_calend(self):
         dp = DayPlanner()
-        self.label_output['text'] = dp.out_tasks()
+        self.listbox_tasks.delete(0, END)
+        for task in dp.out_tasks():
+            self.listbox_tasks.insert(0, task.__str__())
 
 
 
