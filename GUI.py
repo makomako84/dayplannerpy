@@ -1,7 +1,7 @@
 from tkinter import *
 from tkcalendar import  Calendar, DateEntry
 from API.DayPlanner import DayPlanner
-import  datetime
+from datetime import datetime, date, timedelta
 from pydispatch import dispatcher
 
 DATE_PICKED = 'date-picked'
@@ -20,12 +20,16 @@ class DatePicker(Frame):
             cal.master.destroy()
 
         top = Toplevel(self.master)
-        mindate = datetime.date(year=2015, month=1, day=1)
-        maxdate = datetime.date.today() + datetime.timedelta(days=60)
-        today = datetime.date.today()
+        mindate = date(year=2015, month=1, day=1)
+        maxdate = date.today() + timedelta(days=60)
+        selecteddate = date.today()
+        if self.picked_date != None:
+            selecteddate = self.picked_date
+
+
         cal = Calendar(top, font="Arial 14", selectmode='day', locale='en_US',
                        mindate=mindate, maxdate=maxdate, disabledforeground='red',
-                       cursor="hand1", year=today.year, month=today.month, day=today.day)
+                       cursor="hand1", year=selecteddate.year, month=selecteddate.month, day=selecteddate.day)
         cal.pack(fill="both", expand=True)
         b = Button(top, text="ok", command=apply_selection)
         b.pack()
@@ -38,14 +42,14 @@ class GUI(Frame):
         Frame.__init__(self,master)
 
         # vars
-        self.currentDate = StringVar()
-        self.currentDate.set(datetime.date.today())
+        self.currentDateStr = StringVar()
+        self.currentDateStr.set(date.today())
 
         # Frames
         self.frame_today_list = Frame(master)
         self.frame_buttons_holder = Frame(master)
 
-        self.label_current_date = Label(self.frame_today_list, width=25, textvariable=self.currentDate)
+        self.label_current_date = Label(self.frame_today_list, width=25, textvariable=self.currentDateStr)
         self.label_output = Label(self.frame_today_list,width=100)
         self.listbox_tasks = Listbox(self.frame_today_list,width=100,height=25)
         self.button_output = Button(self.frame_buttons_holder, text="Out")
@@ -71,11 +75,12 @@ class GUI(Frame):
     def update_listbox_tasks(self):
         dp = DayPlanner()
         self.listbox_tasks.delete(0, END)
-        for task in dp.out_tasks():
+        currentdate = datetime.strptime(self.currentDateStr.get(), "%Y-%m-%d").date()
+        for task in dp.get_tasks_filtered_by_date(currentdate):
             self.listbox_tasks.insert(0, task.__str__())
 
     def date_picked_handler(self,sender):
-        self.currentDate.set(sender.picked_date)
+        self.currentDateStr.set(sender.picked_date)
         self.update_listbox_tasks()
 
 

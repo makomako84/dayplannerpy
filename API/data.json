@@ -11,6 +11,18 @@
             "description": null,
             "done": true,
             "date": "2020-4-21 7:0"
+        },
+        {
+            "name": "Buy clothes",
+            "description": null,
+            "done": true,
+            "date": "2020-4-25 19:24"
+        },
+        {
+            "name": "Update pip packages",
+            "description": null,
+            "done": false,
+            "date": "2020-4-25 19:24"
         }
     ],
     "Phones": []

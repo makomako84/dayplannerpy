@@ -2,6 +2,7 @@ import  sys
 import  json
 import  pprint
 from datetime import  datetime
+from datetime import  date
 from API.Objects.Task import Task
 import  os
 
@@ -34,9 +35,10 @@ class DayPlanner:
 
 
     # tasks functions
-    def out_tasks(self):
+    def get_tasks(self):
         return [task.__str__() for task in self.__data["Tasks"]]
-
+    def get_tasks_filtered_by_date(self, date):
+        return list(filter((lambda x: x.datetime.date() == date),self.__data["Tasks"]))
     def add_new_task(self,dict):
         self.__data["Tasks"].append(Task.decodeJSON(dict))
         self.updateJSON()
@@ -80,3 +82,4 @@ class DayPlanner:
         t2 = Task("Update pip packages", False, datetime.now())
         self.__data["Tasks"].append(t1)
         self.__data["Tasks"].append(t2)
+        self.updateJSON()
