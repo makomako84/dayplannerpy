@@ -34,9 +34,6 @@ class DatePicker(Frame):
 
 class GUI(Frame):
 
-    def date_picked_handler(self,sender):
-        self.currentDate.set(sender.picked_date)
-
     def __init__(self, master):
         Frame.__init__(self,master)
 
@@ -54,10 +51,10 @@ class GUI(Frame):
         self.button_output = Button(self.frame_buttons_holder, text="Out")
         self.date_picker = DatePicker(self.frame_buttons_holder)
 
+        # configurate
+        self.button_output['command'] = self.update_listbox_tasks
 
-        self.button_output['command'] = self.out_calend
-
-
+        # pack
         self.frame_today_list.pack()
         self.frame_buttons_holder.pack()
 
@@ -66,16 +63,20 @@ class GUI(Frame):
         self.button_output.pack()
         self.date_picker.pack()
 
+        # events
         dispatcher.connect(self.date_picked_handler, signal=DATE_PICKED, sender=dispatcher.Any)
 
-    def update_listbox(self):
-        pass
+        self.update_listbox_tasks()
 
-    def out_calend(self):
+    def update_listbox_tasks(self):
         dp = DayPlanner()
         self.listbox_tasks.delete(0, END)
         for task in dp.out_tasks():
             self.listbox_tasks.insert(0, task.__str__())
+
+    def date_picked_handler(self,sender):
+        self.currentDate.set(sender.picked_date)
+        self.update_listbox_tasks()
 
 
 
