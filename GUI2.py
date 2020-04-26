@@ -1,9 +1,59 @@
 import  sys
 from PyQt5.QtWidgets import *
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
 from API.DayPlanner import DayPlanner
 from datetime import  date, datetime
 
+class TaskWidget(QListWidget):
+
+   def Clicked(self,item):
+      QMessageBox.information(self, "ListWidget", "You clicked: "+item.text())
+
+class RightSideWidget(QWidget):
+    def __init__(self, parent=None):
+        super(RightSideWidget, self).__init__(parent)
+        self.setFixedWidth(250)
+        verticalLayout = QVBoxLayout()
+
+        label = QLabel()
+        label.setText("Right side")
+        verticalLayout.addWidget(label)
+
+
+        self.setLayout(verticalLayout)
+
+class LeftSideWidget(QWidget):
+    def __init__(self, parent=None):
+        super(LeftSideWidget, self).__init__(parent)
+        self.setMinimumWidth(450)
+        self.setMaximumWidth(750)
+        verticalLayout = QVBoxLayout()
+        self.initUI(verticalLayout)
+        self.setLayout(verticalLayout)
+
+    def initUI(self, layout):
+        label = QLabel()
+        label.setText("Left side")
+        layout.addWidget(label)
+
+class DayTasksWidget(LeftSideWidget):
+    def __init__(self,parent=None):
+        super(DayTasksWidget, self).__init__(parent)
+    def initUI(self, layout):
+
+        headLabel  = QLabel()
+        headLabel.setText("Today")
+        headLabel.setAlignment(Qt.AlignLeft)
+
+        taskListWidget = TaskWidget()
+        taskListWidget.addItem("Item 1");
+        taskListWidget.addItem("Item 2");
+        taskListWidget.itemClicked.connect(taskListWidget.Clicked)
+        taskListWidget.show()
+
+        layout.addWidget(headLabel)
+        layout.addWidget(taskListWidget)
 
 class GUITabs(QTabWidget):
     def __init__(self, parent=None):
@@ -17,11 +67,19 @@ class GUITabs(QTabWidget):
         self.tab2UI()
 
     def tab1UI(self):
-        layout = QFormLayout()
-        layout.addRow("Name", QLineEdit())
-        layout.addRow("Address", QLineEdit())
         self.setTabText(0, "DayTasks")
-        self.tab1.setLayout(layout)
+
+        tabLayout = QHBoxLayout()
+        # tasksLayout = QVBoxLayout()
+
+        leftSide = DayTasksWidget(self)
+        rightSide = RightSideWidget(self)
+
+        tabLayout.addWidget(leftSide)
+        tabLayout.addWidget(rightSide)
+
+
+        self.tab1.setLayout(tabLayout)
 
     def tab2UI(self):
         layout = QFormLayout()
@@ -41,7 +99,6 @@ class MainWindow(QMainWindow):
 
     def initUI(self):
         self.statusBar().showMessage('Ready')
-        self.resize(1280,720)
         self.center()
         self.setWindowTitle('Day Planner Py by Galimsky')
         self.guitabs = GUITabs(self)
