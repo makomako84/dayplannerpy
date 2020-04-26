@@ -1,8 +1,41 @@
 import  sys
-from PyQt5.QtWidgets import QMainWindow, QApplication, QDesktopWidget, QPushButton, QAction, qApp
+from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon
 from API.DayPlanner import DayPlanner
 from datetime import  date, datetime
+
+
+class GUITabsWidget(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        self.label = QLabel('Current')
+
+        self.radio_button_1 = QRadioButton('1')
+        self.radio_button_1.setChecked(True)
+
+        self.radio_button_2 = QRadioButton('2')
+
+        self.button_group = QButtonGroup()
+        self.button_group.addButton(self.radio_button_1)
+        self.button_group.addButton(self.radio_button_2)
+
+        self.button_group.buttonClicked.connect(self._on_radio_button_clicked)
+
+        tabsLayout = QVBoxLayout()
+        tabsLayout.addWidget(self.radio_button_1)
+        tabsLayout.addWidget(self.radio_button_2)
+
+        layout = QHBoxLayout()
+        layout.addLayout(tabsLayout)
+        layout.addWidget(self.label)
+
+
+        self.setLayout(layout)
+
+    def _on_radio_button_clicked(self, button):
+        print(button)
+        self.label.setText('Current: ' + button.text())
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -38,11 +71,15 @@ class MainWindow(QMainWindow):
         commandsMenu.addAction(outAction)
         commandsMenu.addAction(outFilteredAction)
 
-        # button_out = QPushButton('Out calend', self)
-        # button_out.resize(button_out.sizeHint())
+        guiTabs = GUITabsWidget()
 
+        self.setCentralWidget(guiTabs)
 
         self.show()
+
+    def _on_radio_button_clicked(self, button):
+        print(button)
+        self.label.setText('Current: ' + button.text())
 
     def out_tasks(self):
         dp = DayPlanner()
