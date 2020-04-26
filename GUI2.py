@@ -5,37 +5,33 @@ from API.DayPlanner import DayPlanner
 from datetime import  date, datetime
 
 
-class GUITabsWidget(QWidget):
-    def __init__(self):
-        super().__init__()
+class GUITabs(QTabWidget):
+    def __init__(self, parent=None):
+        super(GUITabs, self).__init__(parent)
+        self.tab1 = QWidget()
+        self.tab2 = QWidget()
 
-        self.label = QLabel('Current')
+        self.addTab(self.tab1, "Day Tasks")
+        self.addTab(self.tab2, "PhonesBook")
+        self.tab1UI()
+        self.tab2UI()
 
-        self.radio_button_1 = QRadioButton('1')
-        self.radio_button_1.setChecked(True)
+    def tab1UI(self):
+        layout = QFormLayout()
+        layout.addRow("Name", QLineEdit())
+        layout.addRow("Address", QLineEdit())
+        self.setTabText(0, "DayTasks")
+        self.tab1.setLayout(layout)
 
-        self.radio_button_2 = QRadioButton('2')
-
-        self.button_group = QButtonGroup()
-        self.button_group.addButton(self.radio_button_1)
-        self.button_group.addButton(self.radio_button_2)
-
-        self.button_group.buttonClicked.connect(self._on_radio_button_clicked)
-
-        tabsLayout = QVBoxLayout()
-        tabsLayout.addWidget(self.radio_button_1)
-        tabsLayout.addWidget(self.radio_button_2)
-
-        layout = QHBoxLayout()
-        layout.addLayout(tabsLayout)
-        layout.addWidget(self.label)
-
-
-        self.setLayout(layout)
-
-    def _on_radio_button_clicked(self, button):
-        print(button)
-        self.label.setText('Current: ' + button.text())
+    def tab2UI(self):
+        layout = QFormLayout()
+        sex = QHBoxLayout()
+        sex.addWidget(QRadioButton("Male"))
+        sex.addWidget(QRadioButton("Female"))
+        layout.addRow(QLabel("Sex"), sex)
+        layout.addRow("Date of Birth", QLineEdit())
+        self.setTabText(1, "PhonesBook")
+        self.tab2.setLayout(layout)
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -45,9 +41,11 @@ class MainWindow(QMainWindow):
 
     def initUI(self):
         self.statusBar().showMessage('Ready')
-        self.resize(640,480)
+        self.resize(1280,720)
         self.center()
         self.setWindowTitle('Day Planner Py by Galimsky')
+        self.guitabs = GUITabs(self)
+        self.setCentralWidget(self.guitabs)
 
         exitAction = QAction('Exit', self)
         exitAction.setShortcut('Ctrl+Q')
@@ -62,6 +60,14 @@ class MainWindow(QMainWindow):
         outFilteredAction.setStatusTip('Out today task')
         outFilteredAction.triggered.connect(self.out_filtered)
 
+        openDayTasksAction = QAction('DayTasks', self)
+        openDayTasksAction.setStatusTip('Open today todo tasks')
+        openDayTasksAction.triggered.connect(lambda : self.guitabs.setCurrentIndex(0))
+
+        openPhonesBookAction = QAction('PhonesBook', self)
+        openPhonesBookAction.setStatusTip('Open phonebook')
+        openPhonesBookAction.triggered.connect(lambda : self.guitabs.setCurrentIndex(1))
+
 
         menubar = self.menuBar()
         fileMenu = menubar.addMenu('&File')
@@ -71,15 +77,21 @@ class MainWindow(QMainWindow):
         commandsMenu.addAction(outAction)
         commandsMenu.addAction(outFilteredAction)
 
-        guiTabs = GUITabsWidget()
+        appMenu = menubar.addMenu('&Application')
+        appMenu.addAction(openDayTasksAction)
+        appMenu.addAction(openPhonesBookAction)
 
-        self.setCentralWidget(guiTabs)
+
+        # guiTabs = GUITabsWidget()
+        #
+        # self.setCentralWidget(guiTabs)
 
         self.show()
 
     def _on_radio_button_clicked(self, button):
         print(button)
         self.label.setText('Current: ' + button.text())
+
 
     def out_tasks(self):
         dp = DayPlanner()
