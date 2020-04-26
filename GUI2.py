@@ -5,7 +5,7 @@ from PyQt5.QtCore import *
 from API.DayPlanner import DayPlanner
 from datetime import  date, datetime
 
-class TaskWidget(QListWidget):
+class TasksListWidget(QListWidget):
 
    def Clicked(self,item):
       QMessageBox.information(self, "ListWidget", "You clicked: "+item.text())
@@ -46,14 +46,23 @@ class DayTasksWidget(LeftSideWidget):
         headLabel.setText("Today")
         headLabel.setAlignment(Qt.AlignLeft)
 
-        taskListWidget = TaskWidget()
-        taskListWidget.addItem("Item 1");
-        taskListWidget.addItem("Item 2");
-        taskListWidget.itemClicked.connect(taskListWidget.Clicked)
-        taskListWidget.show()
+        self.tasksListWidget = TasksListWidget()
+
+        self.updateItems()
+
+        self.tasksListWidget.itemClicked.connect(self.tasksListWidget.Clicked)
+        self.tasksListWidget.show()
 
         layout.addWidget(headLabel)
-        layout.addWidget(taskListWidget)
+        layout.addWidget(self.tasksListWidget)
+    def updateItems(self):
+        dp = DayPlanner();
+        current_date_tasks = dp.get_tasks_filtered_by_date(date.today())
+        self.tasksListWidget.clear()
+
+        for task in current_date_tasks:
+            task_time = task.datetime.strftime("%H:%M")
+            self.tasksListWidget.addItem(f"{task_time} {task.name}")
 
 class GUITabs(QTabWidget):
     def __init__(self, parent=None):
