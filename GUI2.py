@@ -5,10 +5,10 @@ from PyQt5.QtCore import *
 from API.DayPlanner import DayPlanner
 from datetime import  date, datetime
 
-class TasksListWidget(QListWidget):
-
-   def Clicked(self,item):
-      QMessageBox.information(self, "ListWidget", "You clicked: "+item.text())
+class TasksListItem(QListWidgetItem):
+    def __init__(self,task, parent=None):
+        super(TasksListItem, self).__init__(parent)
+        self.task = task
 
 class RightSideWidget(QWidget):
     def __init__(self, parent=None):
@@ -40,21 +40,37 @@ class LeftSideWidget(QWidget):
 class DayTasksWidget(LeftSideWidget):
     def __init__(self,parent=None):
         super(DayTasksWidget, self).__init__(parent)
+        self.set_selectedItem(None)
+
+    def set_selectedItem(self, value):
+        self.__selectedItem = value
+    def get_selectedItem(self):
+        return  self.__selectedItem
+
     def initUI(self, layout):
 
         headLabel  = QLabel()
         headLabel.setText("Today")
         headLabel.setAlignment(Qt.AlignLeft)
 
-        self.tasksListWidget = TasksListWidget()
+        self.tasksListWidget = QListWidget()
 
         self.updateItems()
 
-        self.tasksListWidget.itemClicked.connect(self.tasksListWidget.Clicked)
+        self.tasksListWidget.itemClicked.connect(self.itemClicked)
         self.tasksListWidget.show()
 
         layout.addWidget(headLabel)
         layout.addWidget(self.tasksListWidget)
+
+    def itemClicked(self):
+        sender = self.sender()
+        print(sender)
+        print(type(sender))
+        # QListWidget.selectedItems()
+
+        print(sender.selectedItems()[0])
+
     def updateItems(self):
         dp = DayPlanner();
         current_date_tasks = dp.get_tasks_filtered_by_date(date.today())

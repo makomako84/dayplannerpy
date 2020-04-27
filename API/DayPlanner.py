@@ -21,7 +21,7 @@ class DayPlanner:
 
     def __init__(self):
         # self.test_create_tasks()
-        self.__initObjectData()
+        # self.__initObjectData()
         print("init object data")
         # self.updateJSON()
         # self.shell_main_menu()
