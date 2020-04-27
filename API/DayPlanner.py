@@ -1,10 +1,12 @@
 import  sys
 import  json
 import  pprint
+import  os
+import uuid
 from datetime import  datetime
 from datetime import  date
 from API.Objects.Task import Task
-import  os
+
 
 # private
 DATA_FILE_NAME = os.path.join(os.path.dirname(__file__), 'data.json')
@@ -23,6 +25,7 @@ class DayPlanner:
         # self.test_create_tasks()
         # self.__initObjectData()
         print("init object data")
+        self.__initObjectData()
         # self.updateJSON()
         # self.shell_main_menu()
 
@@ -40,6 +43,7 @@ class DayPlanner:
     def get_tasks_filtered_by_date(self, date):
         return list(filter((lambda x: x.datetime.date() == date),self.__data["Tasks"]))
     def add_new_task(self,dict):
+        dict["uuid"] = str(uuid.uuid1())
         self.__data["Tasks"].append(Task.decodeJSON(dict))
         self.updateJSON()
 

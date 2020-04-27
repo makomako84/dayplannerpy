@@ -3,22 +3,22 @@ from API.Utils.timeutils import  deserializeDate, serializeDate
 
 class Task:
 
-    def __init__(self, id,name,done, datetime, *, description=None):
-        self.id = id
+    def __init__(self, uuid,name,done, datetime, *, description=None):
+        self.uuid = uuid
         self.name = name
         self.done = done
         self.datetime = datetime
         self.description = description
     @staticmethod
     def decodeJSON(jsondata):
-        newTask = Task(id=jsondata["id"],name=jsondata["name"], done=jsondata["done"], datetime=deserializeDate(jsondata["date"]))
+        newTask = Task(uuid=jsondata["uuid"],name=jsondata["name"], done=jsondata["done"], datetime=deserializeDate(jsondata["date"]))
         if "description" in jsondata:
             newTask.description = jsondata["description"]
         return newTask
 
     def encodeJSON(self):
         return {
-            "id":self.id,
+            "uuid":self.uuid,
             "name":self.name,
             "description": self.description,
             "done": self.done,
@@ -27,12 +27,12 @@ class Task:
 
     def __eq__(self, other):
         assert isinstance(other, Task), "other is not instance of Task"
-        return  self.id == other.id
+        return  self.uuid == other.uuid
 
     def __ne__(self, other):
         assert isinstance(other, Task), "other is not instance of Task"
-        return self.id != other.id
+        return self.uuid != other.uuid
 
     def __str__(self):
-        return f"{self.id}, {self.name}, {self.done}, {self.description}, {self.datetime}"
+        return f"{self.uuid}, {self.name}, {self.done}, {self.description}, {self.datetime}"
 

@@ -10,20 +10,20 @@ DATA_FILE_NAME = os.path.join(os.path.dirname(__file__), 'data.json')
 
 def generate_ids(collection):
 
-    def generate_id(item):
-        while True:
-            newId = str(uuid.uuid1())
-            existring_ids = [i["uuid"] for i in collection if "uuid" in i]
-            if newId in existring_ids:
-                continue
-            else:
-                return newId
+    # def generate_id(item):
+    #     while True:
+    #         newId = str(uuid.uuid1())
+    #         existring_ids = [i["uuid"] for i in collection if "uuid" in i]
+    #         if newId in existring_ids:
+    #             continue
+    #         else:
+    #             return newId
 
     for item in collection:
         if "uuid" in item:
             pass
         else:
-            item["uuid"] = generate_id(item)
+            item["uuid"] = str(uuid.uuid1())
 
     return collection
 

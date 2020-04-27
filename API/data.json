@@ -1,46 +1,53 @@
 {
     "Tasks": [
         {
+            "uuid": "5076ee3f-8862-11ea-8c36-c4651682db4c",
             "name": "some another task",
             "description": null,
             "done": true,
-            "date": "2012-4-8 3:5",
-            "uuid": "5076ee3f-8862-11ea-8c36-c4651682db4c"
+            "date": "2012-4-8 3:5"
         },
         {
+            "uuid": "50773b3d-8862-11ea-b22d-c4651682db4c",
             "name": "Learn python",
             "description": null,
             "done": true,
-            "date": "2020-4-21 7:0",
-            "uuid": "50773b3d-8862-11ea-b22d-c4651682db4c"
+            "date": "2020-4-21 7:0"
         },
         {
+            "uuid": "50773b3e-8862-11ea-a1f0-c4651682db4c",
             "name": "Buy clothes",
             "description": null,
             "done": true,
-            "date": "2020-4-25 19:24",
-            "uuid": "50773b3e-8862-11ea-a1f0-c4651682db4c"
+            "date": "2020-4-25 19:24"
         },
         {
+            "uuid": "50773b3f-8862-11ea-af05-c4651682db4c",
             "name": "Update pip packages",
             "description": null,
             "done": false,
-            "date": "2020-4-25 19:24",
-            "uuid": "50773b3f-8862-11ea-af05-c4651682db4c"
+            "date": "2020-4-25 19:24"
         },
         {
+            "uuid": "50773b40-8862-11ea-9fbf-c4651682db4c",
             "name": "Do work",
             "description": null,
             "done": true,
-            "date": "2020-4-26 16:0",
-            "uuid": "50773b40-8862-11ea-9fbf-c4651682db4c"
+            "date": "2020-4-26 16:0"
         },
         {
+            "uuid": "50773b41-8862-11ea-9166-c4651682db4c",
             "name": "clean",
             "description": null,
             "done": true,
-            "date": "2020-4-27 14:0",
-            "uuid": "50773b41-8862-11ea-9166-c4651682db4c"
+            "date": "2020-4-27 14:0"
+        },
+        {
+            "uuid": "e7ac58a6-8863-11ea-8e61-c4651682db4c",
+            "name": "do jazz",
+            "description": null,
+            "done": true,
+            "date": "2020-4-27 13:50"
         }
     ],
     "Phones": []
