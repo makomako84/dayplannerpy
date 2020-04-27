@@ -4,24 +4,27 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from API.DayPlanner import DayPlanner
 from datetime import  date, datetime
+from pydispatch import dispatcher
+
+TASK_PICKED = 'task-picked'
 
 class TasksListItem(QListWidgetItem):
-    def __init__(self,task, parent=None):
+    def __init__(self,uuid, parent=None):
         super(TasksListItem, self).__init__(parent)
-        self.task = task
+        self.uuid = uuid
 
 class RightSideWidget(QWidget):
     def __init__(self, parent=None):
         super(RightSideWidget, self).__init__(parent)
         self.setFixedWidth(250)
         verticalLayout = QVBoxLayout()
+        self.initUI(verticalLayout)
+        self.setLayout(verticalLayout)
 
+    def initUI(self, layout):
         label = QLabel()
         label.setText("Right side")
-        verticalLayout.addWidget(label)
-
-
-        self.setLayout(verticalLayout)
+        layout.addWidget(label)
 
 class LeftSideWidget(QWidget):
     def __init__(self, parent=None):
@@ -37,6 +40,21 @@ class LeftSideWidget(QWidget):
         label.setText("Left side")
         layout.addWidget(label)
 
+class PickedTaskWidget(RightSideWidget):
+    def __init__(self, parent=None):
+        super(PickedTaskWidget, self).__init__(parent)
+        self.pickedTaskText = None
+
+    def initUI(self, layout):
+        self.label = QLabel()
+        self.label.setText("")
+        layout.addWidget(self.label)
+
+    def updateItem(self, task):
+        self.label.setText(task.__str__())
+
+
+
 class DayTasksWidget(LeftSideWidget):
     def __init__(self,parent=None):
         super(DayTasksWidget, self).__init__(parent)
@@ -44,6 +62,7 @@ class DayTasksWidget(LeftSideWidget):
 
     def set_selectedItem(self, value):
         self.__selectedItem = value
+        dispatcher.send(signal=TASK_PICKED, sender=self)
     def get_selectedItem(self):
         return  self.__selectedItem
 
@@ -65,20 +84,21 @@ class DayTasksWidget(LeftSideWidget):
 
     def itemClicked(self):
         sender = self.sender()
-        print(sender)
-        print(type(sender))
-        # QListWidget.selectedItems()
+        dp = DayPlanner()
+        foundTask = dp.find_task_by_uuid_str(sender.selectedItems()[0].uuid)
+        self.set_selectedItem(foundTask)
 
-        print(sender.selectedItems()[0])
 
     def updateItems(self):
-        dp = DayPlanner();
+        dp = DayPlanner()
         current_date_tasks = dp.get_tasks_filtered_by_date(date.today())
         self.tasksListWidget.clear()
 
         for task in current_date_tasks:
             task_time = task.datetime.strftime("%H:%M")
-            self.tasksListWidget.addItem(f"{task_time} {task.name}")
+            newItem = TasksListItem(task.uuid)
+            newItem.setText(f"{task_time} {task.name}")
+            self.tasksListWidget.addItem(newItem)
 
 class GUITabs(QTabWidget):
     def __init__(self, parent=None):
@@ -91,6 +111,7 @@ class GUITabs(QTabWidget):
         self.tab1UI()
         self.tab2UI()
 
+
     def tab1UI(self):
         self.setTabText(0, "DayTasks")
 
@@ -98,13 +119,19 @@ class GUITabs(QTabWidget):
         # tasksLayout = QVBoxLayout()
 
         leftSide = DayTasksWidget(self)
-        rightSide = RightSideWidget(self)
+        self.rightSide = PickedTaskWidget(self)
 
         tabLayout.addWidget(leftSide)
-        tabLayout.addWidget(rightSide)
+        tabLayout.addWidget(self.rightSide)
 
+        dispatcher.connect(self.task_picked_handler, signal=TASK_PICKED, sender=dispatcher.Any)
 
         self.tab1.setLayout(tabLayout)
+
+    def task_picked_handler(self,sender):
+        self.rightSide.updateItem(sender.get_selectedItem())
+
+
 
     def tab2UI(self):
         layout = QFormLayout()

@@ -47,6 +47,9 @@ class DayPlanner:
         self.__data["Tasks"].append(Task.decodeJSON(dict))
         self.updateJSON()
 
+    def find_task_by_uuid_str(self, searchvalue:str) -> Task:
+        searchfunc = lambda x: x.uuid.find(searchvalue)!=-1
+        return list(filter(searchfunc, self.__data["Tasks"]))[0]
     def find_task_by_name(self, searchvalue:str) -> []:
         searchfunc = lambda x: x.name.find(searchvalue) != -1
         return list(filter(searchfunc, self.__data["Tasks"]))
