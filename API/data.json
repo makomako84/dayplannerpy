@@ -78,11 +78,11 @@
             "date": "2020-4-28 15:40"
         },
         {
-            "uuid": "<function uuid1 at 0x0000015C5B7683A0>",
-            "name": "new entry",
-            "description": "some descript",
-            "done": true,
-            "date": "2020-4-28 19:0"
+            "uuid": "d9577dde-894e-11ea-af27-c4651682db4c",
+            "name": "New entry",
+            "description": "ok with that",
+            "done": false,
+            "date": "2020-4-28 22:0"
         }
     ],
     "Phones": []

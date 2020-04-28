@@ -60,9 +60,9 @@ class DayPlanner:
         else:
             self.__data["Tasks"].append(task)
             self.updateJSON()
-            
+
     def get_temp_task(self, dt:datetime):
-        return  Task(str(uuid.uuid1),"",False, dt)
+        return  Task(str(uuid.uuid1()),"",False, dt)
 
     def find_task_by_uuid_str(self, searchvalue:str) -> Task:
         searchfunc = lambda x: x.uuid.find(searchvalue)!=-1
