@@ -6,6 +6,7 @@ from pydispatch import dispatcher
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from API.DayPlanner import DayPlanner
+from API.Objects.Task import  Task
 from GUI.widgets import TabWidget, LeftSideWidget, RightSideWidget
 
 TASK_PICKED = 'task-picked'
@@ -20,26 +21,38 @@ class PickedTaskWidget(RightSideWidget):
         super(PickedTaskWidget, self).__init__(parent)
 
     def initUI(self, layout : QFormLayout):
-        self.nameedit = QLabel("Name: ")
-        self.dateedit = QLabel("Date: ")
-        self.descriptionedit = QLabel("Description: ")
-        self.isdoneedit = QCheckBox("Is task done")
+        namelabel = QLabel("Name: ")
+        self.nameedit = QLineEdit()
+
+        datetimelabel = QLabel("Date: ")
+        self.datetimeedit = QDateTimeEdit()
+
+        descriptionlabel = QLabel("Description: ")
+        self.descriptionedit = QTextEdit()
+
+        isdonelabel = QLabel("Is task done: ")
+        self.isdoneedit = QCheckBox()
+
         self.cancelbutton = QPushButton("Cancel")
         self.applybutton = QPushButton("Save")
 
         buttonslayout = QHBoxLayout()
 
-        layout.addRow(self.nameedit, QLineEdit())
-        layout.addRow(self.dateedit, QDateTimeEdit())
-        layout.addRow(self.descriptionedit, QTextEdit())
-        layout.addRow(self.isdoneedit)
+        layout.addRow(namelabel, self.nameedit)
+        layout.addRow(datetimelabel, self.datetimeedit)
+        layout.addRow(descriptionlabel, self.descriptionedit)
+        layout.addRow(isdonelabel, self.isdoneedit)
         buttonslayout.addWidget(self.cancelbutton)
         buttonslayout.addWidget(self.applybutton)
         layout.addRow(buttonslayout)
 
-    def updateItem(self, task):
-        # self.label.setText(task.__str__())
-        pass
+
+    def updateItem(self, task:Task):
+        self.nameedit.setText(task.name)
+        self.datetimeedit.setDateTime(task.datetime)
+        self.descriptionedit.setText(task.description)
+        self.isdoneedit.setCheckState(task.done)
+
 
     def apply_button_clicked(self):
         pass

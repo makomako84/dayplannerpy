@@ -1,4 +1,4 @@
-from API.Utils.timeutils import  deserializeDate, serializeDate
+from API.Utils.timeutils import  deserialize_datetime, serialize_datetime
 
 
 class Task:
@@ -11,7 +11,7 @@ class Task:
         self.description = description
     @staticmethod
     def decodeJSON(jsondata):
-        newTask = Task(uuid=jsondata["uuid"],name=jsondata["name"], done=jsondata["done"], datetime=deserializeDate(jsondata["date"]))
+        newTask = Task(uuid=jsondata["uuid"],name=jsondata["name"], done=jsondata["done"], datetime=deserialize_datetime(jsondata["date"]))
         if "description" in jsondata:
             newTask.description = jsondata["description"]
         return newTask
@@ -22,7 +22,7 @@ class Task:
             "name":self.name,
             "description": self.description,
             "done": self.done,
-            "date": serializeDate(self.datetime)
+            "date": serialize_datetime(self.datetime)
         }
 
     def __eq__(self, other):
