@@ -1,9 +1,9 @@
-from  datetime import  datetime
+from  datetime import  datetime as dt
 
 
-def serialize_datetime(datetime:datetime):
-    if isinstance(datetime, datetime):
+def serialize_datetime(datetime:dt):
+    if isinstance(datetime, dt):
         return "{}-{}-{} {}:{}".format(datetime.year, datetime.month, datetime.day, datetime.hour, datetime.minute)
 
-def deserialize_datetime(datetimestr:str) -> datetime:
-    return datetime.strptime(datetimestr, '%Y-%m-%d %H:%M')
+def deserialize_datetime(datetimestr:str) -> dt:
+    return dt.strptime(datetimestr, '%Y-%m-%d %H:%M')

@@ -19,11 +19,16 @@ class TasksListItem(QListWidgetItem):
 class PickedTaskWidget(RightSideWidget):
     def __init__(self, parent=None):
         super(PickedTaskWidget, self).__init__(parent)
+        self.__datachanged = False
         self.hide()
+
+    def raisedatachanged(self):
+        self.__datachanged = True
 
     def initUI(self, layout : QFormLayout):
         namelabel = QLabel("Name: ")
         self.nameedit = QLineEdit()
+
 
         datetimelabel = QLabel("Date: ")
         self.datetimeedit = QDateTimeEdit()
@@ -33,10 +38,12 @@ class PickedTaskWidget(RightSideWidget):
 
         isdonelabel = QLabel("Is task done: ")
         self.isdoneedit = QCheckBox()
+        self.isdoneedit.setTristate(on=False)
 
         self.cancelbutton = QPushButton("Cancel")
-        self.cancelbutton.clicked.connect(lambda: self.hide())
+        self.cancelbutton.clicked.connect(self.hide)
         self.applybutton = QPushButton("Save")
+        self.applybutton.clicked.connect(self.apply_button_clicked)
 
         buttonslayout = QHBoxLayout()
 
@@ -53,12 +60,30 @@ class PickedTaskWidget(RightSideWidget):
         self.nameedit.setText(task.name)
         self.datetimeedit.setDateTime(task.datetime)
         self.descriptionedit.setText(task.description)
-        self.isdoneedit.setCheckState(task.done)
+        self.isdoneedit.setChecked(task.done)
         self.show()
+
+        self.nameedit.textChanged.connect(self.raisedatachanged)
+        self.datetimeedit.dateTimeChanged.connect(self.raisedatachanged)
+        self.descriptionedit.textChanged.connect(self.raisedatachanged)
+        self.isdoneedit.stateChanged.connect(self.raisedatachanged)
+
+    def hide(self):
+        try:
+            self.nameedit.textChanged.disconnect()
+            self.datetimeedit.dateTimeChanged.disconnect()
+            self.descriptionedit.textChanged.disconnect()
+            self.isdoneedit.stateChanged.disconnect()
+            self.__datachanged = False
+        except TypeError:
+            print("not connected")
+        super().hide()
 
 
     def apply_button_clicked(self):
-        pass
+        if self.__datachanged:
+            print("SAVING DATA")
+            self.__datachanged = False
     def cancel_button_clicked(self):
         self.hide()
 
@@ -129,6 +154,7 @@ class DayTasksWidget(TabWidget):
 
     def task_picked_handler(self,sender):
         if(sender.selectedtask != None):
+            self.rightside.hide()
             self.rightside.updateItem(sender.selectedtask)
         else:
             self.rightside.hide()

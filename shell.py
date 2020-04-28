@@ -34,7 +34,7 @@ class Shell():
         ui = {}
         ui["name"] = input("Enter task name: ")
         ui["date"] = input("enter date in form: YYYY-M-D H:M ")
-        ui["done"] = True if input("Is task done? y/n ") else False
+        ui["done"] = True if input("Is task done? y ")=="y" else False
         dayplanner = DayPlanner()
         dayplanner.add_new_task(ui)
 
