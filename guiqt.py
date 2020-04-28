@@ -1,12 +1,15 @@
-import  sys
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
+import sys
+from datetime import  date
+
+from PyQt5.QtWidgets import \
+    (QTabWidget, QMainWindow, QAction,
+    QDesktopWidget,QApplication)
+
 from API.DayPlanner import DayPlanner
+
 from GUI.daytasks import DayTasksWidget
 from GUI.widgets import TabWidget
-from datetime import  date, datetime
-from pydispatch import dispatcher
+
 
 
 class GUITabs(QTabWidget):
@@ -17,18 +20,17 @@ class GUITabs(QTabWidget):
 
         self.addTab(self.tab1, "Day Tasks")
         self.addTab(self.tab2, "PhonesBook")
-        self.tab2UI()
 
 
-    def tab2UI(self):
-        layout = QFormLayout()
-        sex = QHBoxLayout()
-        sex.addWidget(QRadioButton("Male"))
-        sex.addWidget(QRadioButton("Female"))
-        layout.addRow(QLabel("Sex"), sex)
-        layout.addRow("Date of Birth", QLineEdit())
-        self.setTabText(1, "PhonesBook")
-        self.tab2.setLayout(layout)
+    # def tab2UI(self):
+        # layout = QFormLayout()
+        # sex = QHBoxLayout()
+        # sex.addWidget(QRadioButton("Male"))
+        # sex.addWidget(QRadioButton("Female"))
+        # layout.addRow(QLabel("Sex"), sex)
+        # layout.addRow("Date of Birth", QLineEdit())
+        # self.setTabText(1, "PhonesBook")
+        # self.tab2.setLayout(layout)
 
 class MainWindow(QMainWindow):
     def __init__(self):

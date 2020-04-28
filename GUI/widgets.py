@@ -1,10 +1,10 @@
-from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QLabel, QHBoxLayout)
+from PyQt5.QtWidgets import *
 
 class RightSideWidget(QWidget):
     def __init__(self, parent=None):
         super(RightSideWidget, self).__init__(parent)
-        self.setFixedWidth(250)
-        verticalLayout = QVBoxLayout()
+        self.setFixedWidth(325)
+        verticalLayout = QFormLayout()
         self.initUI(verticalLayout)
         self.setLayout(verticalLayout)
 

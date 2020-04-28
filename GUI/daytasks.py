@@ -1,10 +1,9 @@
 import  sys
-from datetime import  date, datetime
+from datetime import  date
 from pydispatch import dispatcher
 
 
 from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from API.DayPlanner import DayPlanner
 from GUI.widgets import TabWidget, LeftSideWidget, RightSideWidget
@@ -21,24 +20,36 @@ class PickedTaskWidget(RightSideWidget):
         super(PickedTaskWidget, self).__init__(parent)
         self.pickedTaskText = None
 
-    def initUI(self, layout):
-        self.label = QLabel()
-        self.label.setText("")
-        layout.addWidget(self.label)
+    def initUI(self, layout : QFormLayout):
+        self.nameedit = QLabel("Name: ")
+        self.dateedit = QLabel("Date: ")
+        self.descriptionedit = QLabel("Description: ")
+        self.isdoneedit = QCheckBox("Is task done")
+        self.applybutton = QPushButton("Save")
+
+        layout.addRow(self.nameedit, QLineEdit())
+        layout.addRow(self.dateedit, QDateTimeEdit())
+        layout.addRow(self.descriptionedit, QTextEdit())
+        layout.addRow(self.isdoneedit)
+        layout.addRow(self.applybutton)
 
     def updateItem(self, task):
-        self.label.setText(task.__str__())
+        # self.label.setText(task.__str__())
+        pass
 
 class DayTasksListWidget(LeftSideWidget):
     def __init__(self,parent=None):
         super(DayTasksListWidget, self).__init__(parent)
-        self.set_selectedItem(None)
+        self.__selectedtask  = None
 
-    def set_selectedItem(self, value):
-        self.__selectedItem = value
+    @property
+    def selectedtask(self):
+        return self.__selectedtask
+
+    @selectedtask.setter
+    def selectedtask(self, value):
+        self.__selectedtask = value
         dispatcher.send(signal=TASK_PICKED, sender=self)
-    def get_selectedItem(self):
-        return  self.__selectedItem
 
     def initUI(self, layout):
 
@@ -50,17 +61,16 @@ class DayTasksListWidget(LeftSideWidget):
 
         self.updateItems()
 
-        self.tasksListWidget.itemClicked.connect(self.itemClicked)
+        self.tasksListWidget.itemClicked.connect(self.taskClicked)
         self.tasksListWidget.show()
 
         layout.addWidget(headLabel)
         layout.addWidget(self.tasksListWidget)
 
-    def itemClicked(self):
+    def taskClicked(self):
         sender = self.sender()
         dp = DayPlanner()
-        foundTask = dp.find_task_by_uuid_str(sender.selectedItems()[0].uuid)
-        self.set_selectedItem(foundTask)
+        self.selectedtask = dp.find_task_by_uuid_str(sender.selectedItems()[0].uuid)
 
 
     def updateItems(self):
@@ -87,4 +97,4 @@ class DayTasksWidget(TabWidget):
         dispatcher.connect(self.task_picked_handler, signal=TASK_PICKED, sender=dispatcher.Any)
 
     def task_picked_handler(self,sender):
-        self.rightside.updateItem(sender.get_selectedItem())
+        self.rightside.updateItem(sender.selectedtask)

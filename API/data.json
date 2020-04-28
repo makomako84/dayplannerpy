@@ -48,6 +48,20 @@
             "description": null,
             "done": true,
             "date": "2020-4-27 13:50"
+        },
+        {
+            "uuid": "e32b2238-8904-11ea-aee6-c4651682db4c",
+            "name": "make additions to project",
+            "description": null,
+            "done": true,
+            "date": "2020-4-28 9:20"
+        },
+        {
+            "uuid": "f2cabafc-8904-11ea-9c59-c4651682db4c",
+            "name": "Update GUI",
+            "description": null,
+            "done": true,
+            "date": "2020-4-28 10:0"
         }
     ],
     "Phones": []
