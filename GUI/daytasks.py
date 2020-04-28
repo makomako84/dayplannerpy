@@ -1,5 +1,5 @@
 import  sys
-from datetime import  date
+from datetime import  date, datetime
 from pydispatch import dispatcher
 
 
@@ -131,7 +131,6 @@ class DayTasksListWidget(LeftSideWidget):
 
         self.tasksListWidget = QListWidget()
 
-        self.updateItems()
 
         self.tasksListWidget.itemClicked.connect(self.taskClicked)
         self.tasksListWidget.itemSelectionChanged.connect(self.selectionChanged)
@@ -150,9 +149,9 @@ class DayTasksListWidget(LeftSideWidget):
         self.selectedtask = dp.find_task_by_uuid_str(sender.selectedItems()[0].uuid)
 
 
-    def updateItems(self):
+    def updateItems(self, dt: date):
         dp = DayPlanner()
-        current_date_tasks = dp.get_tasks_filtered_by_date(date.today())
+        current_date_tasks = dp.get_tasks_filtered_by_date(dt)
         self.tasksListWidget.clear()
 
         for task in current_date_tasks:
@@ -164,15 +163,7 @@ class DayTasksListWidget(LeftSideWidget):
 class DayTasksWidget(TabWidget):
     def __init__(self,parent=None):
         super(DayTasksWidget, self).__init__(parent)
-        self.currentdate = date.today()
-
-    @property
-    def currentdate(self):
-        return self.__curentdate
-    @currentdate.setter
-    def currentdate(self, value):
-        self.__curentdate = value
-        self.pickdatebutton.setText(self.__curentdate.__str__())
+        self.dateedit.setDate(date.today())
 
 
     def initUI(self,layout):
@@ -186,9 +177,12 @@ class DayTasksWidget(TabWidget):
         dispatcher.connect(self.date_picked_handler, signal=DATE_PICKED, sender=dispatcher.Any)
 
     def initHeader(self, headerlayout:QHBoxLayout):
-        self.pickdatebutton = QPushButton()
-        
-        headerlayout.addWidget(self.pickdatebutton)
+        datelabel = QLabel("Current date: ")
+        self.dateedit = QDateEdit()
+        self.dateedit.setMaximumWidth(150)
+        headerlayout.addWidget(datelabel)
+        headerlayout.addWidget(self.dateedit)
+        self.dateedit.dateChanged.connect(self.date_picked_handler)
 
     def task_picked_handler(self,sender):
         if(sender.selectedtask != None):
@@ -198,4 +192,4 @@ class DayTasksWidget(TabWidget):
             self.rightside.hide()
 
     def date_picked_handler(self, sender):
-        self.leftside.updateItems()
+        self.leftside.updateItems(self.dateedit.dateTime().toPyDateTime().date())

@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import *
+from PyQt5.QtCore import Qt
 
 class RightSideWidget(QWidget):
     def __init__(self, parent=None):
@@ -32,6 +33,7 @@ class TabWidget(QWidget):
         super(TabWidget, self).__init__(parent)
         verticallayout = QVBoxLayout()
         headerlayout = QHBoxLayout()
+        headerlayout.setAlignment(Qt.AlignLeft)
         tabLayout = QHBoxLayout()
         self.leftside = None
         self.rightside = None
