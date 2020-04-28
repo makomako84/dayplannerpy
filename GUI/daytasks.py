@@ -18,23 +18,32 @@ class TasksListItem(QListWidgetItem):
 class PickedTaskWidget(RightSideWidget):
     def __init__(self, parent=None):
         super(PickedTaskWidget, self).__init__(parent)
-        self.pickedTaskText = None
 
     def initUI(self, layout : QFormLayout):
         self.nameedit = QLabel("Name: ")
         self.dateedit = QLabel("Date: ")
         self.descriptionedit = QLabel("Description: ")
         self.isdoneedit = QCheckBox("Is task done")
+        self.cancelbutton = QPushButton("Cancel")
         self.applybutton = QPushButton("Save")
+
+        buttonslayout = QHBoxLayout()
 
         layout.addRow(self.nameedit, QLineEdit())
         layout.addRow(self.dateedit, QDateTimeEdit())
         layout.addRow(self.descriptionedit, QTextEdit())
         layout.addRow(self.isdoneedit)
-        layout.addRow(self.applybutton)
+        buttonslayout.addWidget(self.cancelbutton)
+        buttonslayout.addWidget(self.applybutton)
+        layout.addRow(buttonslayout)
 
     def updateItem(self, task):
         # self.label.setText(task.__str__())
+        pass
+
+    def apply_button_clicked(self):
+        pass
+    def cancel_button_clicked(self):
         pass
 
 class DayTasksListWidget(LeftSideWidget):
