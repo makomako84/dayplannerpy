@@ -9,7 +9,9 @@ from API.Objects.Task import Task
 
 
 # private
-DATA_FILE_NAME = os.path.join(os.path.dirname(__file__), 'data.json')
+# DATA_FILE_NAME = os.path.join(os.path.dirname(__file__), 'data.json')
+DATA_FILE_NAME = os.path.join(os.path.dirname(sys.executable), 'data.json')
+print(DATA_FILE_NAME)
 
 
 
@@ -24,12 +26,16 @@ class DayPlanner:
     def __init__(self):
         # self.test_create_tasks()
         # self.__initObjectData()
-        print("init object data")
+        # print("init object data")
+        # nonlocal  DATA_FILE_NAME
+        # DATA_FILE_NAME = os.path.join(os.path.dirname(sys.executable), 'data.json')
+        print(sys.executable)
         self.__initObjectData()
         # self.updateJSON()
         # self.shell_main_menu()
 
     def __initObjectData(self):
+        # print(DATA_FILE_NAME)
         nonobjectdata = self.readJSON()
         tasks = []
         for task in nonobjectdata["Tasks"]:

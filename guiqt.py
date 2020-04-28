@@ -4,7 +4,7 @@ from datetime import  date
 from PyQt5.QtWidgets import \
     (QTabWidget, QMainWindow, QAction,
     QDesktopWidget,QApplication)
-
+print(sys.executable)
 from API.DayPlanner import DayPlanner
 
 from GUI.daytasks import DayTasksWidget

@@ -67,13 +67,13 @@
             "uuid": "9a1816de-8918-11ea-a886-c4651682db4c",
             "name": "test task (edited)",
             "description": "Ok with that edit",
-            "done": true,
+            "done": false,
             "date": "2020-4-28 11:30"
         },
         {
             "uuid": "f31a0e92-8918-11ea-8eb9-c4651682db4c",
-            "name": "Edited test task 2",
-            "description": "Some test description",
+            "name": "Edited test task 23",
+            "description": "Some test description (edited)",
             "done": true,
             "date": "2020-4-28 15:40"
         }
