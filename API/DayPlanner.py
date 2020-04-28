@@ -46,6 +46,12 @@ class DayPlanner:
         dict["uuid"] = str(uuid.uuid1())
         self.__data["Tasks"].append(Task.decodeJSON(dict))
         self.updateJSON()
+    def save_task(self, task:Task):
+        if task in self.__data["Tasks"]:
+            self.__data["Tasks"][self.__data["Tasks"].index(task)] = task
+            self.updateJSON()
+        else:
+            print("There is noo such task")
 
     def find_task_by_uuid_str(self, searchvalue:str) -> Task:
         searchfunc = lambda x: x.uuid.find(searchvalue)!=-1

@@ -30,11 +30,18 @@ class LeftSideWidget(QWidget):
 class TabWidget(QWidget):
     def __init__(self,parent=None):
         super(TabWidget, self).__init__(parent)
+        verticallayout = QVBoxLayout()
+        headerlayout = QHBoxLayout()
         tabLayout = QHBoxLayout()
         self.leftside = None
         self.rightside = None
         self.initUI(tabLayout)
-        self.setLayout(tabLayout)
+        self.initHeader(headerlayout)
+        verticallayout.addLayout(headerlayout)
+        verticallayout.addLayout(tabLayout)
+        self.setLayout(verticallayout)
 
+    def initHeader(self, headerlayout):
+        pass
     def initUI(self,layout):
         pass
