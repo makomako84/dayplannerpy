@@ -98,6 +98,7 @@ class PickedTaskWidget(RightSideWidget):
         super().hide()
 
 
+
     def apply_button_clicked(self):
         if self.__datachanged:
             print("SAVING DATA")
@@ -164,6 +165,7 @@ class DayTasksWidget(TabWidget):
     def __init__(self,parent=None):
         super(DayTasksWidget, self).__init__(parent)
         self.dateedit.setDate(date.today())
+        self.newtaskbutton.clicked.connect(self.create_task_handler)
 
 
     def initUI(self,layout):
@@ -180,9 +182,17 @@ class DayTasksWidget(TabWidget):
         datelabel = QLabel("Current date: ")
         self.dateedit = QDateEdit()
         self.dateedit.setMaximumWidth(150)
+        self.newtaskbutton = QPushButton("Create new task")
         headerlayout.addWidget(datelabel)
         headerlayout.addWidget(self.dateedit)
+        headerlayout.addWidget(self.newtaskbutton)
         self.dateedit.dateChanged.connect(self.date_picked_handler)
+
+    def create_task_handler(self):
+        dp = DayPlanner()
+        temptask = dp.get_temp_task(self.dateedit.dateTime().toPyDateTime())
+        self.rightside.hide()
+        self.rightside.updateItem(temptask)
 
     def task_picked_handler(self,sender):
         if(sender.selectedtask != None):

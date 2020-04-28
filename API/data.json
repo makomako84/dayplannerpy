@@ -76,6 +76,13 @@
             "description": "Some test description (edited)",
             "done": true,
             "date": "2020-4-28 15:40"
+        },
+        {
+            "uuid": "<function uuid1 at 0x0000015C5B7683A0>",
+            "name": "new entry",
+            "description": "some descript",
+            "done": true,
+            "date": "2020-4-28 19:0"
         }
     ],
     "Phones": []

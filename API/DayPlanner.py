@@ -8,11 +8,11 @@ from datetime import  date
 from API.Objects.Task import Task
 
 
-# private
-# DATA_FILE_NAME = os.path.join(os.path.dirname(__file__), 'data.json')
-DATA_FILE_NAME = os.path.join(os.path.dirname(sys.executable), 'data.json')
-print(DATA_FILE_NAME)
+#py path
+DATA_FILE_NAME = os.path.join(os.path.dirname(__file__), 'data.json')
 
+#build path
+# DATA_FILE_NAME = os.path.join(os.path.dirname(sys.executable), 'data.json')
 
 
 class DayPlanner:
@@ -56,8 +56,13 @@ class DayPlanner:
         if task in self.__data["Tasks"]:
             self.__data["Tasks"][self.__data["Tasks"].index(task)] = task
             self.updateJSON()
+            print("There is such task")
         else:
-            print("There is noo such task")
+            self.__data["Tasks"].append(task)
+            self.updateJSON()
+            
+    def get_temp_task(self, dt:datetime):
+        return  Task(str(uuid.uuid1),"",False, dt)
 
     def find_task_by_uuid_str(self, searchvalue:str) -> Task:
         searchfunc = lambda x: x.uuid.find(searchvalue)!=-1
