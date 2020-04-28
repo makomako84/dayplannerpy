@@ -64,12 +64,16 @@ class DayPlanner:
     def get_temp_task(self, dt:datetime):
         return  Task(str(uuid.uuid1()),"",False, dt)
 
-    def find_task_by_uuid_str(self, searchvalue:str) -> Task:
-        searchfunc = lambda x: x.uuid.find(searchvalue)!=-1
+    def find_task_by_uuid_str(self, uuidvalue:str) -> Task:
+        searchfunc = lambda x: x.uuid.find(uuidvalue)!=-1
         return list(filter(searchfunc, self.__data["Tasks"]))[0]
     def find_task_by_name(self, searchvalue:str) -> []:
         searchfunc = lambda x: x.name.find(searchvalue) != -1
         return list(filter(searchfunc, self.__data["Tasks"]))
+
+    def delete_task_byuuid(self, uuid:str):
+        self.__data["Tasks"].remove(self.find_task_by_uuid_str(uuid))
+        self.updateJSON()
 
     def delete_task(self, foundtask: Task):
         self.__data["Tasks"].remove(foundtask)

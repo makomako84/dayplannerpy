@@ -64,25 +64,11 @@
             "date": "2020-4-28 10:0"
         },
         {
-            "uuid": "9a1816de-8918-11ea-a886-c4651682db4c",
-            "name": "test task (edited)",
-            "description": "Ok with that edit",
-            "done": false,
-            "date": "2020-4-28 11:30"
-        },
-        {
-            "uuid": "f31a0e92-8918-11ea-8eb9-c4651682db4c",
-            "name": "Edited test task 23",
-            "description": "Some test description (edited)",
+            "uuid": "7e23d7e3-8952-11ea-b0f2-c4651682db4c",
+            "name": "Thi is tho name",
+            "description": "delete task option",
             "done": true,
-            "date": "2020-4-28 15:40"
-        },
-        {
-            "uuid": "d9577dde-894e-11ea-af27-c4651682db4c",
-            "name": "New entry",
-            "description": "ok with that",
-            "done": false,
-            "date": "2020-4-28 22:0"
+            "date": "2020-4-28 21:0"
         }
     ],
     "Phones": []

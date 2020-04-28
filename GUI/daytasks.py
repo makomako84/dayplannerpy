@@ -56,8 +56,14 @@ class PickedTaskWidget(RightSideWidget):
 
         self.cancelbutton = QPushButton("Cancel")
         self.cancelbutton.clicked.connect(self.hide)
+
+        self.deletebutton = QPushButton("Delete")
+        self.deletebutton.clicked.connect(self.deletetask_button_clicked)
+
         self.applybutton = QPushButton("Save")
         self.applybutton.clicked.connect(self.apply_button_clicked)
+
+
 
         buttonslayout = QHBoxLayout()
 
@@ -66,6 +72,7 @@ class PickedTaskWidget(RightSideWidget):
         layout.addRow(descriptionlabel, self.descriptionedit)
         layout.addRow(isdonelabel, self.isdoneedit)
         buttonslayout.addWidget(self.cancelbutton)
+        buttonslayout.addWidget(self.deletebutton)
         buttonslayout.addWidget(self.applybutton)
         layout.addRow(buttonslayout)
 
@@ -106,8 +113,27 @@ class PickedTaskWidget(RightSideWidget):
             dp = DayPlanner()
             dp.save_task(self.editedtask)
             dispatcher.send(signal=DATE_PICKED, sender=self)
-    def cancel_button_clicked(self):
+
+
+    def deletetask_button_clicked(self):
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Information)
+
+        msg.setText("Are you sure?")
+
+        msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+        # msg.buttonClicked.connect(self.deletetask_confirmed)
+
+        retval = msg.exec_()
+        if retval == QMessageBox.Ok:
+            self.deletetask_confirmed()
+
+    def deletetask_confirmed(self):
+        dp = DayPlanner()
+        dp.delete_task_byuuid(self.editedtask.uuid)
+        dispatcher.send(signal=DATE_PICKED, sender=self)
         self.hide()
+
 
 class DayTasksListWidget(LeftSideWidget):
     def __init__(self,parent=None):
