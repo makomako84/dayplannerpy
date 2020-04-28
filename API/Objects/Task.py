@@ -30,6 +30,7 @@ class Task:
         return  self.uuid == other.uuid
 
     def __ne__(self, other):
+        if other == None: return True
         assert isinstance(other, Task), "other is not instance of Task"
         return self.uuid != other.uuid
 

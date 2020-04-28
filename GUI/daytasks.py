@@ -19,6 +19,7 @@ class TasksListItem(QListWidgetItem):
 class PickedTaskWidget(RightSideWidget):
     def __init__(self, parent=None):
         super(PickedTaskWidget, self).__init__(parent)
+        self.hide()
 
     def initUI(self, layout : QFormLayout):
         namelabel = QLabel("Name: ")
@@ -34,6 +35,7 @@ class PickedTaskWidget(RightSideWidget):
         self.isdoneedit = QCheckBox()
 
         self.cancelbutton = QPushButton("Cancel")
+        self.cancelbutton.clicked.connect(lambda: self.hide())
         self.applybutton = QPushButton("Save")
 
         buttonslayout = QHBoxLayout()
@@ -52,17 +54,19 @@ class PickedTaskWidget(RightSideWidget):
         self.datetimeedit.setDateTime(task.datetime)
         self.descriptionedit.setText(task.description)
         self.isdoneedit.setCheckState(task.done)
+        self.show()
 
 
     def apply_button_clicked(self):
         pass
     def cancel_button_clicked(self):
-        pass
+        self.hide()
 
 class DayTasksListWidget(LeftSideWidget):
     def __init__(self,parent=None):
         super(DayTasksListWidget, self).__init__(parent)
         self.__selectedtask  = None
+        self.tasksListWidget.setSelectionMode(QAbstractItemView.ContiguousSelection)
 
     @property
     def selectedtask(self):
@@ -84,10 +88,15 @@ class DayTasksListWidget(LeftSideWidget):
         self.updateItems()
 
         self.tasksListWidget.itemClicked.connect(self.taskClicked)
+        self.tasksListWidget.itemSelectionChanged.connect(self.selectionChanged)
         self.tasksListWidget.show()
 
         layout.addWidget(headLabel)
         layout.addWidget(self.tasksListWidget)
+
+    def selectionChanged(self):
+        if len(self.tasksListWidget.selectedItems()) == 0:
+            self.selectedtask = None
 
     def taskClicked(self):
         sender = self.sender()
@@ -119,4 +128,7 @@ class DayTasksWidget(TabWidget):
         dispatcher.connect(self.task_picked_handler, signal=TASK_PICKED, sender=dispatcher.Any)
 
     def task_picked_handler(self,sender):
-        self.rightside.updateItem(sender.selectedtask)
+        if(sender.selectedtask != None):
+            self.rightside.updateItem(sender.selectedtask)
+        else:
+            self.rightside.hide()
