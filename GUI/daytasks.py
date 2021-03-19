@@ -134,7 +134,6 @@ class PickedTaskWidget(RightSideWidget):
         dispatcher.send(signal=DATE_PICKED, sender=self)
         self.hide()
 
-
 class DayTasksListWidget(LeftSideWidget):
     def __init__(self,parent=None):
         super(DayTasksListWidget, self).__init__(parent)

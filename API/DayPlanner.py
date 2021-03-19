@@ -67,7 +67,7 @@ class DayPlanner:
     def find_task_by_uuid_str(self, uuidvalue:str) -> Task:
         searchfunc = lambda x: x.uuid.find(uuidvalue)!=-1
         return list(filter(searchfunc, self.__data["Tasks"]))[0]
-    def find_task_by_name(self, searchvalue:str) -> []:
+    def find_task_by_name(self, searchvalue:str):
         searchfunc = lambda x: x.name.find(searchvalue) != -1
         return list(filter(searchfunc, self.__data["Tasks"]))
 
