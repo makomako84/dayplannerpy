@@ -1,3 +1,5 @@
+# this is not primary file
+
 from tkinter import *
 from tkcalendar import  Calendar, DateEntry
 from API.DayPlanner import DayPlanner
