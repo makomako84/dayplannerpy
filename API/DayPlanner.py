@@ -2,6 +2,7 @@ import  sys
 import  json
 import  pprint
 import  os
+from typing import List
 import uuid
 from datetime import  datetime
 from datetime import  date
@@ -46,8 +47,10 @@ class DayPlanner:
     # tasks functions
     def get_tasks(self):
         return [task.__str__() for task in self.__data["Tasks"]]
-    def get_tasks_filtered_by_date(self, date):
+        
+    def get_tasks_filtered_by_date(self, date) -> List[Task]:
         return list(filter((lambda x: x.datetime.date() == date),self.__data["Tasks"]))
+
     def add_new_task(self,dict):
         dict["uuid"] = str(uuid.uuid1())
         self.__data["Tasks"].append(Task.decodeJSON(dict))

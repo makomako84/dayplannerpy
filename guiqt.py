@@ -54,6 +54,10 @@ class MainWindow(QMainWindow):
         outAction.setStatusTip('Out calend tasks data')
         outAction.triggered.connect(self.out_tasks)
 
+        dayAnalyseAction = QAction('Day analyse', self)
+        dayAnalyseAction.setStatusTip('Get picked date tasks accomplishment')
+        dayAnalyseAction.triggered.connect(self.out_analyse)
+
         outFilteredAction = QAction('Out filtered', self)
         outFilteredAction.setStatusTip('Out today task')
         outFilteredAction.triggered.connect(self.out_filtered)
@@ -74,6 +78,7 @@ class MainWindow(QMainWindow):
         commandsMenu = menubar.addMenu('&Commands')
         commandsMenu.addAction(outAction)
         commandsMenu.addAction(outFilteredAction)
+        commandsMenu.addAction(dayAnalyseAction)
 
         appMenu = menubar.addMenu('&Application')
         appMenu.addAction(openDayTasksAction)
@@ -92,14 +97,22 @@ class MainWindow(QMainWindow):
 
 
     def out_tasks(self):
-        dp = DayPlanner()
-        for task in  dp.get_tasks():
+        dayPlanner = DayPlanner()
+        for task in  dayPlanner.get_tasks():            
             print(task.__str__())
+
     def out_filtered(self):
-        dp = DayPlanner()
+        dayPlanner = DayPlanner()
         currentdate = date.today()
-        for task in dp.get_tasks_filtered_by_date(currentdate):
+        for task in dayPlanner.get_tasks_filtered_by_date(currentdate):
             print(task.__str__())
+
+    def out_analyse(self):
+        dayPlanner = DayPlanner()
+        currentdate = date.today()
+        todayTasks = dayPlanner.get_tasks_filtered_by_date(currentdate)
+        doneTasks = list(filter(lambda task: task.done == True, todayTasks))
+        print("number of donet tasks today: {} / {}".format(len(doneTasks), len(todayTasks)))
 
     def center(self):
         qr = self.frameGeometry()
