@@ -53,6 +53,7 @@ class DayPlanner:
 
     def add_new_task(self,dict):
         dict["uuid"] = str(uuid.uuid1())
+        print("task with uuid {} added".format(dict["uuid"]))
         self.__data["Tasks"].append(Task.decodeJSON(dict))
         self.updateJSON()
     def save_task(self, task:Task):
@@ -65,6 +66,9 @@ class DayPlanner:
             self.updateJSON()
 
     def get_temp_task(self, dt:datetime):
+        """
+        New task uuid created here. One of most important methods
+        """
         return  Task(str(uuid.uuid1()),"",False, dt)
 
     def find_task_by_uuid_str(self, uuidvalue:str) -> Task:
@@ -100,7 +104,7 @@ class DayPlanner:
             json.dump(jsondata, write_file, indent=4)
 
 
-
+    # simple tests
     def test_create_new_task(self, name, done, date):
         self.__data["Tasks"].append(Task(name, done, date))
         self.updateJSON()
@@ -114,3 +118,4 @@ class DayPlanner:
         self.__data["Tasks"].append(t1)
         self.__data["Tasks"].append(t2)
         self.updateJSON()
+    

@@ -105,7 +105,7 @@ class PickedTaskWidget(RightSideWidget):
         super().hide()
 
 
-
+    # this method is responds for saving data in RightWidget dayTask
     def apply_button_clicked(self):
         if self.__datachanged:
             print("SAVING DATA")
@@ -186,6 +186,7 @@ class DayTasksListWidget(LeftSideWidget):
             newItem.setText(f"{task_time} {task.name}")
             self.tasksListWidget.addItem(newItem)
 
+# this is layout top class
 class DayTasksWidget(TabWidget):
     def __init__(self,parent=None):
         super(DayTasksWidget, self).__init__(parent)
