@@ -7,6 +7,7 @@ import uuid
 from datetime import  datetime
 from datetime import  date
 from API.Objects.Task import Task
+from API.Objects.Phone import Phone
 
 
 #py path
@@ -44,7 +45,7 @@ class DayPlanner:
         self.__data["Tasks"] = tasks
 
 
-    # tasks functions
+# tasks methods defs.
     def get_tasks(self):
         return [task.__str__() for task in self.__data["Tasks"]]
         
@@ -86,6 +87,13 @@ class DayPlanner:
         self.__data["Tasks"].remove(foundtask)
         self.updateJSON()
 
+# phone methods defs.
+
+    def get_temp_phone(self):
+        """
+        New phone uuid created here
+        """
+        return Phone(str(uuid.uuid1()), "", "")
 
     def out_phones(self):
         print(*self.phones, sep='\n')
